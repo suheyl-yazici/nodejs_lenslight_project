@@ -1,13 +1,13 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Photo from "../models/photoModel.js";
 
 const createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
     res.status(201).json({ user: user._id });
   } catch (error) {
-    console.log("error", error);
 
     let errors2 = {};
 
@@ -21,7 +21,6 @@ const createUser = async (req, res) => {
       });
     }
 
-    console.log("errors2: ", errors2);
 
     res.status(400).json(errors2);
   }
@@ -69,9 +68,11 @@ const createToken = (userId) => {
   });
 };
 
-const getDashboardPage = (req, res) => {
+const getDashboardPage = async (req, res) => {
+  const photos = await Photo.find({user: res.locals.user._id})
   res.render("dashboard", {
     link: "dashboard",
+    photos
   });
 };
 
