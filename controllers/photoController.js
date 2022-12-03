@@ -71,10 +71,9 @@ const deletePhoto = async (req, res) => {
     const photoId = photo.image_id;
 
     await cloudinary.uploader.destroy(photoId);
-    await Photo.findOneAndDelete({ _id: req.params.id });
+    await Photo.findOneAndRemove({ _id: req.params.id });
 
     req.status(200).redirect("/users/dashboard");
-    updatePhoto
   } catch (error) {
     res.status(500).json({
       succeded: false,
